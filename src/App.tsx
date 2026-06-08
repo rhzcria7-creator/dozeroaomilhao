@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, ReactNode } from "react";
 import { useScrollReveal } from "./hooks/useScrollReveal";
+import { PRODUCT, CHAPTERS, CHECKOUT_URL } from "./constants/product";
 
 // ============================================================
 // Split Text (blur + rise)
@@ -286,17 +287,9 @@ function LogoLarge() {
 }
 
 // ============================================================
-// EBOOKS DATA
+// CAPÍTULOS (importados de constants/product.ts)
+// O ebook único de 40 páginas é composto por 7 capítulos estratégicos.
 // ============================================================
-const EBOOKS = [
-  { n: "01", t: "Mentalidade de Milionário", d: "O ebook base. Um resumo essencial de toda a jornada — revela o que a maioria dos cursos não ensina sobre como pensam quem realmente constrói riqueza.", price: "39,90", original: "49,90", discount: 20, base: true },
-  { n: "02", t: "Fundamentos Financeiros", d: "Os princípios eternos que sustentam toda grande fortuna — explicados de forma direta e aplicável no seu dia a dia.", price: "42,90", original: "49,90", discount: 14, base: false },
-  { n: "03", t: "Organização do Dinheiro", d: "Controle, método e clareza. O sistema simples para organizar receitas, gastos e poupança de verdade.", price: "54,90", original: "59,90", discount: 8, base: false },
-  { n: "04", t: "Múltiplas Fontes de Renda", d: "Estratégias práticas para gerar, multiplicar e proteger diferentes entradas de dinheiro.", price: "47,90", original: "59,90", discount: 20, base: false },
-  { n: "05", t: "Investimentos Inteligentes", d: "Como fazer o dinheiro trabalhar para você com estratégia, paciência e critério.", price: "56,90", original: "69,90", discount: 18, base: false },
-  { n: "06", t: "Negócios e Escala", d: "Como transformar um bom resultado em algo exponencial sem perder o controle.", price: "66,90", original: "79,90", discount: 16, base: false },
-  { n: "07", t: "Legado e Liberdade", d: "A arquitetura financeira que protege e multiplica patrimônio por décadas — e para quem você ama.", price: "76,90", original: "89,90", discount: 14, base: false },
-];
 
 // ============================================================
 // NAV (staggered / flowing menu)
@@ -311,7 +304,7 @@ function Nav() {
   }, []);
   const links = [
     { href: "#problema", label: "O Problema" },
-    { href: "#dentro", label: "Os Ebooks" },
+    { href: "#dentro", label: "Os Capítulos" },
     { href: "#oferta", label: "Oferta" },
     { href: "#faq", label: "FAQ" },
   ];
@@ -328,8 +321,8 @@ function Nav() {
           ))}
         </div>
         <ClickSpark>
-          <a href="https://pay.cakto.com.br/3encvzz_907741" target="_blank" rel="noopener noreferrer" className="btn-primary !py-2 !px-5 !text-sm">
-            Quero o Pack
+          <a href={CHECKOUT_URL} className="btn-primary !py-2 !px-5 !text-sm">
+            Quero o Ebook
           </a>
         </ClickSpark>
       </nav>
@@ -349,7 +342,7 @@ function Hero() {
         <div>
           <div className="hero-anim-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-400/30 bg-gold-400/5 text-gold-400 text-xs font-medium tracking-wider uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" />
-            Coleção 2026 · 42% OFF no pack
+            Edição 2026 · Ebook Premium · 40 Páginas
           </div>
           <h1 className="hero-anim-2 mt-6 font-display text-5xl sm:text-6xl lg:text-7xl font-light leading-[1.08] tracking-tight">
             <span className="block">
@@ -366,17 +359,17 @@ function Hero() {
             </span>
           </h1>
           <p className="hero-anim-3 mt-8 text-lg lg:text-xl text-mist max-w-xl leading-relaxed">
-            7 ebooks diretos ao ponto sobre os princípios, estratégias e mentalidade que transformam pessoas comuns em construtores de patrimônio.
-            Comece por <span className="text-white font-medium">R$ 39,90</span> — ou leve a coleção completa por <span className="text-gold-400 font-medium">R$ 329,90</span> (42% OFF).
+            Um manual completo de <span className="text-white font-medium">40 páginas</span> de puro conteúdo estratégico sobre os princípios, hábitos e sistemas que transformam pessoas comuns em construtores de patrimônio.
+            Investimento único de <span className="text-gold-400 font-medium">R$ {PRODUCT.price.current}</span> — acesso imediato.
           </p>
           <div className="hero-anim-4 mt-10 flex flex-col sm:flex-row gap-4">
             <ClickSpark>
-              <a href="https://pay.cakto.com.br/3encvzz_907741" target="_blank" rel="noopener noreferrer" className="btn-primary glow-pulse inline-flex">
-                Quero a Coleção Completa
+              <a href={CHECKOUT_URL} className="btn-primary glow-pulse inline-flex">
+                Quero o Guia Definitivo
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </a>
             </ClickSpark>
-            <a href="#dentro" className="btn-ghost">Ver Os 7 Ebooks</a>
+            <a href="#dentro" className="btn-ghost">Ver os 7 Capítulos</a>
           </div>
           <div className="hero-anim-4 mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-white/50">
             <div className="flex items-center gap-2">
@@ -386,7 +379,7 @@ function Hero() {
             <div className="hidden sm:block w-px h-4 bg-white/10" />
             <div className="hidden sm:block">Acesso imediato · PDF</div>
             <div className="hidden sm:block w-px h-4 bg-white/10" />
-            <div className="hidden sm:flex items-center gap-2"><span className="text-gold-400 font-medium">42% OFF</span> na coleção</div>
+            <div className="hidden sm:flex items-center gap-2"><span className="text-gold-400 font-medium">40 páginas</span> · estratégia pura</div>
           </div>
         </div>
         <div className="relative flex items-center justify-center">
@@ -394,7 +387,21 @@ function Hero() {
             <div className="w-[520px] h-[520px] rounded-full bg-gold-400/15 blur-[140px] logo-glow" />
           </div>
           <div className="hero-anim-book relative">
-            <LogoLarge />
+            <div className="relative">
+              <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-gold-400/30 via-transparent to-gold-400/10 blur-2xl" aria-hidden="true" />
+              <img
+                src="/ebook-cover.png"
+                alt="Ebook Do Zero ao Milhão"
+                width={420}
+                height={609}
+                loading="eager"
+                fetchPriority="high"
+                className="relative w-[280px] sm:w-[340px] lg:w-[420px] h-auto rounded-2xl shadow-[0_40px_100px_-20px_rgba(245,197,66,0.35)] border border-gold-400/20 logo-float"
+              />
+              <div className="absolute -bottom-4 -right-4 bg-gold-400 text-black text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full shadow-2xl">
+                40 Páginas · Premium
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -413,8 +420,8 @@ function TrustBar() {
   const stats = [
     { v: 3200, suffix: "+", l: "Leitores transformando" },
     { v: 4.9, decimals: 1, suffix: "", l: "Avaliação média" },
-    { v: 7, suffix: "", l: "Ebooks diretos ao ponto" },
-    { v: 42, suffix: "%", l: "OFF · Coleção Completa" },
+    { v: 40, suffix: "", l: "Páginas de estratégia" },
+    { v: 7, suffix: "", l: "Capítulos · Sistema Completo" },
   ];
   return (
     <section className="bg-black border-y border-white/5 overflow-hidden">
@@ -433,13 +440,13 @@ function TrustBar() {
           speed="normal"
           direction="left"
           items={[
-            { label: "Mentalidade de Milionário", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a8 8 0 00-8 8c0 4 4 6 4 10h8c0-4 4-6 4-10a8 8 0 00-8-8z"/></svg> },
-            { label: "Fundamentos Financeiros", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18M5 21V7l8-4 8 4v14"/></svg> },
-            { label: "Organização do Dinheiro", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg> },
-            { label: "Múltiplas Fontes de Renda", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg> },
+            { label: "O Mapa da Riqueza", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a8 8 0 00-8 8c0 4 4 6 4 10h8c0-4 4-6 4-10a8 8 0 00-8-8z"/></svg> },
+            { label: "Mentalidade Milionária", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18M5 21V7l8-4 8 4v14"/></svg> },
+            { label: "Controle Financeiro", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg> },
+            { label: "Aumento de Renda", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg> },
+            { label: "Negócios e Vendas", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> },
             { label: "Investimentos Inteligentes", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg> },
-            { label: "Negócios e Escala", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> },
-            { label: "Legado e Liberdade", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> },
+            { label: "Sistema de Execução · 90 Dias", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> },
           ]}
         />
         <LogoLoop
@@ -451,7 +458,7 @@ function TrustBar() {
             { label: "Pix · Cartão · Boleto", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg> },
             { label: "Compra 100% Segura", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> },
             { label: "Atualizações Vitalícias", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg> },
-            { label: "Bônus: Planilha de Patrimônio", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> },
+            { label: "Bônus: Plano de 90 Dias", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> },
             { label: "+3.200 Leitores Ativos", icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg> },
           ]}
         />
@@ -469,42 +476,42 @@ function Testimonials() {
       name: "Rafael Andrade",
       role: "Empreendedor · São Paulo",
       stars: 5,
-      text: "Comecei pelo Ebook 01 sem grandes expectativas. Em uma semana já tinha mudado minha relação com dinheiro. Voltei e comprei a coleção completa. Vale cada centavo.",
+      text: "Comecei a ler sem grandes expectativas. Em uma semana já tinha mudado minha relação com dinheiro. 40 páginas que valem por um curso inteiro. Vale cada centavo.",
       initial: "R",
     },
     {
       name: "Juliana Mendes",
       role: "Designer · Rio de Janeiro",
       stars: 5,
-      text: "Conteúdo direto, sem enrolação. Em vez de mais um curso com horas de vídeo, leio um ebook por noite e aplico no dia seguinte. O melhor investimento que fiz em educação financeira.",
+      text: "Conteúdo direto, sem enrolação. Em vez de mais um curso com horas de vídeo, li o ebook em duas noites e apliquei na semana seguinte. O melhor investimento que fiz em educação financeira.",
       initial: "J",
     },
     {
       name: "Marcos Oliveira",
       role: "Engenheiro · Belo Horizonte",
       stars: 5,
-      text: "O ebook de Investimentos Inteligentes mudou minha forma de pensar sobre risco e retorno. Pela primeira vez entendi de verdade. Já recomendei para 5 amigos.",
+      text: "O capítulo de Investimentos Inteligentes mudou minha forma de pensar sobre risco e retorno. Pela primeira vez entendi de verdade. Já recomendei para 5 amigos.",
       initial: "M",
     },
     {
       name: "Carolina Souza",
       role: "Médica · Curitiba",
       stars: 5,
-      text: "Sou cética com promessas de gurus. Aqui é diferente: nada de fórmula mágica, só método claro e aplicável. A Planilha de Patrimônio sozinha já vale o pack.",
+      text: "Sou cética com promessas de gurus. Aqui é diferente: nada de fórmula mágica, só método claro e aplicável. O Plano de 90 Dias sozinho já vale o ebook inteiro.",
       initial: "C",
     },
     {
       name: "Bruno Carvalho",
       role: "Analista · Porto Alegre",
       stars: 5,
-      text: "Comprei a coleção completa por causa do desconto. Surpresa: tudo é realmente útil, nenhum ebook é só preenchimento. Sete temas, sete pequenos manuais.",
+      text: "Comprei pelo preço, fiquei pelo conteúdo. Cada capítulo se conecta com o próximo de forma lógica. Não tem enrolação — 40 páginas, sete temas, um sistema inteiro.",
       initial: "B",
     },
     {
       name: "Larissa Pereira",
       role: "Professora · Salvador",
       stars: 5,
-      text: "Começar pela Mentalidade foi a melhor escolha. Sem essa base, eu teria tentado pular para investimentos e fracassado. Recomendo seguir a ordem sugerida.",
+      text: "Ler na ordem dos capítulos foi a melhor escolha. Sem a base de Mentalidade, eu teria pulado direto para investimentos e fracassado. Recomendo seguir o livro do início ao fim.",
       initial: "L",
     },
   ];
@@ -649,63 +656,56 @@ function Chapters() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 reveal">
           <div className="max-w-2xl">
-            <span className="text-xs tracking-[0.3em] uppercase text-gold-400">03 · Os 7 Ebooks</span>
+            <span className="text-xs tracking-[0.3em] uppercase text-gold-400">03 · Dentro do Ebook</span>
             <h2 className="mt-4 font-display text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05]">
-              Sete ebooks. <br /><span className="italic text-gold-gradient">Compre só o que precisa.</span>
+              Sete capítulos. <br /><span className="italic text-gold-gradient">Um sistema completo.</span>
             </h2>
           </div>
           <p className="lg:max-w-sm text-mist leading-relaxed">
-            Cada ebook é vendido separadamente com seu próprio desconto (de 8% a 20%). Comece pelo Ebook 01 — a base que resume tudo — e avance no seu ritmo. Ou leve a coleção completa com 42% OFF.
+            40 páginas de puro conteúdo estratégico, divididas em sete capítulos sequenciais que se conectam do primeiro pensamento à primeira execução. Leia do início ao fim — ou volte a qualquer um como referência.
           </p>
         </div>
 
         <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {EBOOKS.map((c, i) => (
+          {CHAPTERS.map((c, i) => (
             <Spotlight
               key={i}
-              className={`reveal reveal-delay-${(i % 3) + 1} rounded-2xl border p-8 backdrop-blur card-hover ${c.base ? "border-gold-400/40 bg-gradient-to-br from-gold-400/[0.07] to-black shimmer-border" : "border-white/10 bg-white/[0.02]"}`}
+              className={`reveal reveal-delay-${(i % 3) + 1} rounded-2xl border p-8 backdrop-blur card-hover ${c.highlight ? "border-gold-400/40 bg-gradient-to-br from-gold-400/[0.07] to-black shimmer-border" : "border-white/10 bg-white/[0.02]"}`}
             >
               <div className="flex items-start justify-between mb-6">
-                <span className={`font-display text-5xl ${c.base ? "text-gold-400/60" : "text-white/10 group-hover:text-gold-400/40"} transition-colors`}>{c.n}</span>
-                {c.base ? (
+                <span className={`font-display text-5xl ${c.highlight ? "text-gold-400/60" : "text-white/10 group-hover:text-gold-400/40"} transition-colors`}>{c.n}</span>
+                {c.highlight ? (
                   <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400 px-2.5 py-1 rounded-full">Comece aqui</span>
                 ) : (
-                  <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400/80 px-2 py-1 rounded-full">−{c.discount}%</span>
+                  <span className="text-[10px] font-semibold tracking-widest uppercase text-gold-400 border border-gold-400/40 px-2 py-1 rounded-full">Capítulo</span>
                 )}
               </div>
               <h3 className="text-xl font-medium tracking-tight">{c.t}</h3>
+              <div className="mt-1 text-[11px] tracking-widest uppercase text-gold-400/70">{c.sub}</div>
               <p className="mt-3 text-sm text-mist leading-relaxed flex-1">{c.d}</p>
-              <div className="mt-6 pt-5 border-t border-white/10 flex items-end justify-between gap-2">
-                <div className="flex flex-col">
-                  <span className="text-xs text-white/40 line-through">R$ {c.original}</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs text-mist">R$</span>
-                    <span className="font-display text-2xl text-gold-gradient">{c.price}</span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-semibold tracking-wider uppercase text-black bg-gold-400 px-2 py-1 rounded-full">{c.discount}% OFF</span>
-              </div>
             </Spotlight>
           ))}
 
-          {/* Coleção */}
-          <Spotlight className="reveal reveal-delay-1 rounded-2xl p-8 border border-gold-400/40 bg-gradient-to-br from-gold-400/10 to-black glow-gold">
+          {/* CTA Card — Produto Único */}
+          <Spotlight className="reveal reveal-delay-1 rounded-2xl p-8 border border-gold-400/40 bg-gradient-to-br from-gold-400/10 to-black glow-gold flex flex-col">
             <div className="flex items-start justify-between mb-6">
               <svg className="w-7 h-7 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.7 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg>
-              <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400 px-2.5 py-1 rounded-full">MELHOR VALOR · 42% OFF</span>
+              <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400 px-2.5 py-1 rounded-full">PRODUTO ÚNICO · 40 PÁGINAS</span>
             </div>
-            <h3 className="font-display text-2xl font-light tracking-tight">Coleção Completa</h3>
-            <p className="mt-3 text-sm text-mist leading-relaxed">Leve os 7 ebooks juntos. Mais barato que comprar todos avulsos, mesmo com os descontos individuais.</p>
+            <h3 className="font-display text-2xl font-light tracking-tight">O Guia Definitivo</h3>
+            <p className="mt-3 text-sm text-mist leading-relaxed flex-1">
+              Um manual completo de 40 páginas — todos os 7 capítulos integrados em um único PDF premium. Acesso imediato após o Pix.
+            </p>
             <div className="mt-6 pt-5 border-t border-white/10 flex items-end justify-between gap-2">
               <div className="flex flex-col">
-                <span className="text-xs text-white/40 line-through">R$ 568,80</span>
+                <span className="text-xs text-white/40 line-through">R$ {PRODUCT.price.original}</span>
                 <div className="flex items-baseline gap-1">
                   <span className="text-xs text-mist">R$</span>
-                  <span className="font-display text-3xl text-gold-gradient">329,90</span>
+                  <span className="font-display text-3xl text-gold-gradient">{PRODUCT.price.current}</span>
                 </div>
               </div>
               <ClickSpark>
-                <a href="https://pay.cakto.com.br/3encvzz_907741" target="_blank" rel="noopener noreferrer" className="btn-primary !px-5 !py-2.5 !text-sm">Comprar</a>
+                <a href={CHECKOUT_URL} className="btn-primary !px-5 !py-2.5 !text-sm">Comprar</a>
               </ClickSpark>
             </div>
           </Spotlight>
@@ -720,12 +720,12 @@ function Chapters() {
 // ============================================================
 function Benefits() {
   const benefits = [
-    { t: "Clareza financeira total", d: "Decisões conscientes, nunca mais no escuro." },
-    { t: "Estratégias práticas", d: "Aplicáveis na semana em que você ler." },
-    { t: "Menos erros comuns", d: "Evite as armadilhas que custam anos." },
-    { t: "Capacidade de execução", d: "Do conhecimento à ação com método." },
-    { t: "Visão de longo prazo", d: "Construa algo que dure gerações." },
-    { t: "Independência progressiva", d: "Liberdade construída passo a passo." },
+    { t: "Os 5 Pilares da Riqueza", d: "O mapa completo que sustenta todo grande patrimônio." },
+    { t: "Hábitos que multiplicam", d: "Mentalidade milionária aplicada ao seu dia a dia." },
+    { t: "Método dos Baldes", d: "Sistema visual para controlar cada real que entra e sai." },
+    { t: "Primeiro R$ 1.000 extra", d: "O caminho mais curto para sua renda complementar." },
+    { t: "A Oferta Irresistível", d: "Anatomia de uma venda que se sustenta sozinha." },
+    { t: "Plano de 90 Dias", d: "Da teoria ao resultado mensurável em três meses." },
   ];
   return (
     <section className="relative py-28 lg:py-40 bg-ink-900">
@@ -784,7 +784,7 @@ function BrandShowcase() {
         <div className="mt-20 grid sm:grid-cols-3 gap-px bg-white/5 rounded-2xl overflow-hidden border border-white/5 reveal reveal-delay-2">
           {[
             { k: "Mentalidade", v: "A seta aponta para cima. Sempre." },
-            { k: "Precisão", v: "Cada ebook é um passo calculado." },
+            { k: "Precisão", v: "Cada capítulo é um passo calculado." },
             { k: "Legado", v: "Construa algo que dure gerações." },
           ].map((x) => (
             <div key={x.k} className="bg-black p-8">
@@ -862,13 +862,13 @@ function FaqItem({ q, a, open, onClick }: { q: string; a: string; open: boolean;
 function Faq() {
   const [open, setOpen] = useState<number | null>(0);
   const items = [
-    { q: "Posso comprar apenas um ebook?", a: "Sim. Os 7 ebooks são vendidos separadamente, cada um com seu próprio desconto (de 8% a 20%). O Ebook 01 — Mentalidade de Milionário, que é a base da jornada, sai por R$ 39,90 com 20% OFF sobre R$ 49,90. Os demais títulos variam de R$ 42,90 a R$ 76,90, sempre com preço original riscado e desconto aplicado." },
-    { q: "Qual ebook devo ler primeiro?", a: "Recomendamos começar pelo Ebook 01 — Mentalidade de Milionário. Ele é o resumo essencial de tudo: revela os fundamentos e a forma de pensar que a maioria dos materiais não ensina. A partir dele, você decide quais dos outros 6 ebooks fazem mais sentido para o seu momento." },
-    { q: "Vale mais a pena comprar a coleção completa?", a: "Sim, se você quer a jornada inteira. O preço original da coleção completa é R$ 568,80, mas oferecemos por R$ 329,90 — uma economia real de R$ 238,90 (42% OFF). É mais barato do que comprar todos os ebooks avulsos, mesmo com os descontos individuais, e ainda inclui a Planilha de Patrimônio como bônus exclusivo." },
-    { q: "Em qual formato recebo o material?", a: "Todos os ebooks são entregues em PDF, com acesso e download imediatos após a compra. Cada ebook tem cerca de 10 páginas, diretas ao ponto." },
-    { q: "Existe garantia?", a: "Sim. Você tem 7 dias de garantia incondicional. Se o conteúdo não fizer sentido para você, devolvemos 100% do valor investido, sem perguntas." },
-    { q: "Preciso de conhecimento prévio em finanças?", a: "Não. Os ebooks foram escritos para serem acessíveis mesmo a quem nunca estudou finanças, sem abrir mão da profundidade. Cada conceito é explicado do zero." },
-    { q: "Quais formas de pagamento são aceitas?", a: "Aceitamos Pix, cartão de crédito (com parcelamento) e boleto, com processamento 100% seguro por plataforma certificada." },
+    { q: "O que exatamente eu recebo na compra?", a: `Você recebe o ebook completo "${PRODUCT.name} — ${PRODUCT.subtitle}", em PDF, com 40 páginas de conteúdo estratégico distribuído em 7 capítulos sequenciais. O acesso é imediato após a confirmação do Pix.` },
+    { q: "Por que apenas 40 páginas? Esse é o ebook inteiro?", a: "Sim. 40 páginas de puro conteúdo, sem enrolação. Cortamos preenchimento, repetição e teoria solta — só o que move o ponteiro. É um manual completo, não um resumo." },
+    { q: "Como funciona o pagamento via Pix?", a: `Ao clicar em comprar, você é levado ao checkout seguro. Lá, escaneia o QR Code ou copia o código Pix e paga pelo app do seu banco. O pagamento de R$ ${PRODUCT.price.current} é processado pelo Mercado Pago e seu acesso é liberado em poucos minutos.` },
+    { q: "Posso parcelar?", a: `A oferta promocional de R$ ${PRODUCT.price.current} é exclusiva para Pix à vista. No cartão, ${PRODUCT.price.installments.toLowerCase()}.` },
+    { q: "Existe garantia?", a: `Sim. Você tem ${PRODUCT.guaranteeDays} dias de garantia incondicional. Se o conteúdo não fizer sentido para você, devolvemos 100% do valor investido, sem perguntas.` },
+    { q: "Preciso de conhecimento prévio em finanças?", a: "Não. O ebook foi escrito para ser acessível mesmo a quem nunca estudou finanças, sem abrir mão da profundidade. Cada conceito é explicado do zero." },
+    { q: "Como recebo o material após o pagamento?", a: "Assim que o Pix é confirmado pelo Mercado Pago, você recebe o link de download por e-mail e também tem acesso imediato pela página de confirmação. O link fica válido por 30 dias." },
   ];
   return (
     <section id="faq" className="relative py-28 lg:py-40 bg-black">
@@ -894,58 +894,62 @@ function Offer() {
       <div className="noise" />
       <div className="relative max-w-6xl mx-auto px-6 lg:px-10">
         <div className="text-center reveal">
-          <span className="text-xs tracking-[0.3em] uppercase text-gold-400">08 · Escolha seu caminho</span>
+          <span className="text-xs tracking-[0.3em] uppercase text-gold-400">08 · A Oferta</span>
           <h2 className="mt-4 font-display text-4xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.05]">
-            Comece com um. <br /><span className="italic text-gold-gradient">Ou leve tudo e economize.</span>
+            Um único investimento. <br /><span className="italic text-gold-gradient">Uma virada de chave.</span>
           </h2>
           <p className="mt-6 text-mist max-w-xl mx-auto">
-            Você não precisa investir muito para dar o primeiro passo. Cada ebook é vendido separadamente — e a coleção completa sai com 42% OFF.
+            O Guia Definitivo em PDF — 40 páginas, 7 capítulos, um sistema completo. Pague uma vez, leia para sempre, aplique nos próximos 90 dias.
           </p>
         </div>
 
-        <div className="mt-16 grid lg:grid-cols-2 gap-6 items-stretch">
-          <Spotlight className="reveal reveal-delay-1 rounded-[28px] border border-white/10 bg-white/[0.02] backdrop-blur-xl p-10 lg:p-12">
-            <div className="text-xs tracking-[0.3em] uppercase text-gold-400">Avulso · Escolha seu ebook</div>
-            <h3 className="mt-3 font-display text-3xl font-light tracking-tight">Um ebook de cada vez</h3>
-            <p className="mt-2 text-sm text-mist">Comece pela base ou avance no seu ritmo. Cada ebook tem desconto único, de 8% a 20%.</p>
-            <div className="mt-6 flex flex-col">
-              <span className="text-sm text-white/40 line-through">a partir de R$ 49,90</span>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-sm text-mist">por</span>
-                <span className="font-display text-5xl text-gold-gradient">R$ 39,90</span>
+        <div className="mt-16 grid lg:grid-cols-[0.9fr,1.1fr] gap-6 items-stretch max-w-5xl mx-auto">
+          {/* Mockup */}
+          <div className="reveal reveal-delay-1 rounded-[28px] border border-white/10 bg-gradient-to-br from-gold-400/[0.06] via-black to-black p-10 lg:p-12 flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gold-400/15 blur-[100px]" />
+            </div>
+            <div className="relative">
+              <img
+                src="/ebook-cover.png"
+                alt="Ebook Do Zero ao Milhão"
+                width={300}
+                height={435}
+                loading="lazy"
+                className="w-[220px] sm:w-[260px] lg:w-[300px] h-auto rounded-xl shadow-[0_40px_80px_-20px_rgba(245,197,66,0.4)] border border-gold-400/30 logo-float"
+              />
+              <div className="absolute -top-3 -right-3 bg-gold-400 text-black text-[10px] font-bold tracking-widest uppercase px-3 py-1.5 rounded-full shadow-2xl">
+                40 Páginas
               </div>
             </div>
-            <span className="text-xs text-mist mt-1">Ebook 01 · demais títulos a partir de R$ 42,90</span>
-            <div className="hairline my-7" />
-            <div className="space-y-3 flex-1">
-              {["1 ebook em PDF (~10 páginas)", "Desconto de 8% a 20% em cada título", "Acesso e download imediatos", "Leitura em qualquer dispositivo", "Compre os próximos quando quiser"].map((it, i) => (
-                <div key={i} className="flex items-start gap-3 list-item-anim" style={{ animationDelay: `${i * 80}ms` }}>
-                  <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full border border-gold-400/40 flex items-center justify-center text-gold-400"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5l2.2 2.2L8 3.5"/></svg></span>
-                  <span className="text-white/80 text-sm">{it}</span>
-                </div>
-              ))}
-            </div>
-            <a href="#dentro" className="btn-ghost mt-8 w-full">Ver Preços Individuais</a>
-          </Spotlight>
+          </div>
 
+          {/* Oferta */}
           <Spotlight className="reveal reveal-delay-2 rounded-[28px] border border-gold-400/40 bg-gradient-to-b from-gold-400/[0.08] to-transparent backdrop-blur-xl p-10 lg:p-12 shimmer-border glow-pulse">
             <div className="flex items-center justify-between">
-              <div className="text-xs tracking-[0.3em] uppercase text-gold-400">Coleção · Melhor valor</div>
-              <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400 px-2.5 py-1 rounded-full">−42%</span>
+              <div className="text-xs tracking-[0.3em] uppercase text-gold-400">Ebook Premium · Edição 2026</div>
+              <span className="text-[10px] font-semibold tracking-widest uppercase text-black bg-gold-400 px-2.5 py-1 rounded-full">−{PRODUCT.price.discountPct}%</span>
             </div>
-            <h3 className="mt-3 font-display text-3xl font-light tracking-tight">Do Zero ao Milhão — Completo</h3>
-            <p className="mt-2 text-sm text-mist">Os 7 ebooks juntos. A jornada inteira, do primeiro passo ao legado.</p>
+            <h3 className="mt-3 font-display text-3xl font-light tracking-tight">{PRODUCT.name} — {PRODUCT.subtitle}</h3>
+            <p className="mt-2 text-sm text-mist">O manual completo de 40 páginas. Pagamento único via Pix.</p>
             <div className="mt-6 flex flex-col">
-              <span className="text-sm text-white/40 line-through">R$ 568,80</span>
+              <span className="text-sm text-white/40 line-through">R$ {PRODUCT.price.original}</span>
               <div className="mt-1 flex items-baseline gap-2">
                 <span className="text-sm text-mist">por</span>
-                <span className="font-display text-5xl lg:text-6xl text-gold-gradient">R$ 329,90</span>
+                <span className="font-display text-5xl lg:text-6xl text-gold-gradient">R$ {PRODUCT.price.current}</span>
               </div>
             </div>
-            <span className="text-xs text-mist mt-1">à vista no Pix · ou 10x de R$ 39,99</span>
+            <span className="text-xs text-mist mt-1">à vista no Pix · {PRODUCT.price.installments.toLowerCase()}</span>
             <div className="hairline my-7" />
             <div className="space-y-3 flex-1">
-              {["Todos os 7 ebooks em PDF (~70 páginas)", "Economia de R$ 238,90 vs. preço original", "Acesso e download imediatos", "Checklists práticos em cada ebook", "Atualizações gratuitas vitalícias", "Bônus: Planilha de Patrimônio"].map((it, i) => (
+              {[
+                "Ebook completo em PDF · 40 páginas",
+                "7 capítulos estratégicos integrados",
+                "Acesso e download imediatos após o Pix",
+                "Leitura em qualquer dispositivo (mobile, tablet, desktop)",
+                "Atualizações gratuitas vitalícias",
+                `Garantia incondicional de ${PRODUCT.guaranteeDays} dias`,
+              ].map((it, i) => (
                 <div key={i} className="flex items-start gap-3 list-item-anim" style={{ animationDelay: `${i * 80}ms` }}>
                   <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-gold-400 flex items-center justify-center text-black"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 5l2.2 2.2L8 3.5"/></svg></span>
                   <span className="text-white/90 text-sm">{it}</span>
@@ -953,8 +957,8 @@ function Offer() {
               ))}
             </div>
             <ClickSpark>
-              <a href="https://pay.cakto.com.br/3encvzz_907741" target="_blank" rel="noopener noreferrer" className="btn-primary mt-8 w-full !py-4 text-lg inline-flex justify-center">
-                Quero a Coleção Completa
+              <a href={CHECKOUT_URL} className="btn-primary mt-8 w-full !py-4 text-lg inline-flex justify-center">
+                Quero o Guia Definitivo
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </a>
             </ClickSpark>
@@ -964,7 +968,7 @@ function Offer() {
         <div className="reveal reveal-delay-2 mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-mist">
           <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Compra 100% segura</span>
           <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Garantia de 7 dias</span>
-          <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>Pix, cartão e boleto</span>
+          <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.7 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg>Pagamento processado pelo Mercado Pago</span>
         </div>
 
         <p className="reveal reveal-delay-2 mt-10 text-center text-xs text-mist max-w-2xl mx-auto leading-relaxed">
@@ -993,12 +997,12 @@ function FinalCta() {
           O melhor momento para plantar uma árvore foi há vinte anos. O segundo melhor é agora.
         </p>
         <ClickSpark>
-          <a href="https://pay.cakto.com.br/3encvzz_907741" target="_blank" rel="noopener noreferrer" className="btn-primary glow-pulse mt-12 !px-12 !py-5 text-lg inline-flex">
+          <a href={CHECKOUT_URL} className="btn-primary glow-pulse mt-12 !px-12 !py-5 text-lg inline-flex">
             Começar Minha Jornada Agora
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
         </ClickSpark>
-        <p className="mt-6 text-xs text-white/40 tracking-widest uppercase">Coleção completa por R$ 329,90 · 42% OFF</p>
+        <p className="mt-6 text-xs text-white/40 tracking-widest uppercase">Ebook Premium · 40 páginas · R$ {PRODUCT.price.current} no Pix</p>
       </div>
     </section>
   );
@@ -1033,12 +1037,19 @@ function Footer() {
 // APP
 // ============================================================
 import SuccessPage from "./pages/SuccessPage";
+import CheckoutPage from "./pages/CheckoutPage";
 
 export default function App() {
   useScrollReveal();
 
-  // Roteamento simples para página de sucesso
-  if (window.location.pathname === "/sucesso" || window.location.search.includes("session_id")) {
+  const path =
+    (window as any).__FORCED_PATH__ || window.location.pathname;
+
+  // Roteamento simples
+  if (path === "/checkout") {
+    return <CheckoutPage />;
+  }
+  if (path === "/sucesso" || window.location.search.includes("session_id")) {
     return <SuccessPage />;
   }
 
