@@ -1,51 +1,56 @@
-# 🚀 Do Zero ao Milhão - Sistema Completo
+# 💸 Do Zero ao Milhão - Sistema Completo
 
 Landing page premium + Backend automatizado para vendas de ebooks.
 
+## 📋 Visão Geral
+
+Este projeto é uma solução completa de e-commerce para venda de ebooks, incluindo:
+- Landing page com design premium e alta conversão
+- Integração com Stripe para pagamentos
+- Automação de e-mails e newsletter
+- Sistema seguro de entrega de arquivos
+
 ## 📦 Estrutura do Projeto
 
-```
+```text
 do-zero-ao-milhao/
-├── frontend/                    # Landing page React + Vite
+├── src/                        # Código frontend React
+│   ├── App.tsx                 # Componente principal
+│   ├── pages/
+│   │   └── SuccessPage.tsx     # Página de sucesso
+│   └── ...
+├── public/
+│   ├── _headers               # Netlify headers de segurança
+│   └── _redirects             # Netlify redirects
+├── backend/                   # API Node.js + Express
 │   ├── src/
-│   │   ├── App.tsx             # Componente principal
-│   │   ├── pages/
-│   │   │   └── SuccessPage.tsx # Página de sucesso
-│   │   └── ...
-│   ├── public/
-│   │   ├── _headers            # Netlify headers de segurança
-│   │   └── _redirects          # Netlify redirects
-│   ├── index.html              # HTML com CSP e security headers
-│   └── package.json
-│
-├── backend/                     # API Node.js + Express
-│   ├── src/
-│   │   ├── server.ts           # Servidor principal
+│   │   ├── server.ts          # Servidor principal
 │   │   ├── config/
-│   │   │   └── env.ts          # Validação de variáveis (Zod)
+│   │   │   └── env.ts         # Validação de variáveis (Zod)
 │   │   ├── routes/
-│   │   │   ├── checkout.ts     # Cria sessão Stripe
-│   │   │   ├── webhook.ts      # Recebe eventos Stripe
-│   │   │   ├── download.ts     # Entrega arquivo
-│   │   │   ├── newsletter.ts   # Newsletter API
-│   │   │   └── health.ts       # Health check
+│   │   │   ├── checkout.ts    # Cria sessão Stripe
+│   │   │   ├── webhook.ts     # Recebe eventos Stripe
+│   │   │   ├── download.ts    # Entrega arquivo
+│   │   │   ├── newsletter.ts  # Newsletter API
+│   │   │   └── health.ts      # Health check
 │   │   ├── services/
-│   │   │   ├── database.ts     # PostgreSQL + Drizzle ORM
-│   │   │   ├── email.ts        # Nodemailer + SendGrid
+│   │   │   ├── database.ts    # PostgreSQL + Drizzle ORM
+│   │   │   ├── email.ts       # Nodemailer + SendGrid
 │   │   │   ├── newsletter.ts   # Mailchimp API
-│   │   │   └── download.ts     # Tokens seguros
+│   │   │   └── download.ts    # Tokens seguros
 │   │   └── middleware/
 │   │       └── error-handler.ts
-│   ├── database.sql            # Schema do banco
-│   ├── .env.example            # Template de variáveis
-│   └── package.json
-│
-└── README.md                   # Este arquivo
+│   ├── [database.sql](backend/database.sql)       # Schema do banco
+│   └── .env.example           # Template de variáveis
+├── [package.json](package.json)             # Dependências frontend
+├── [vite.config.ts](vite.config.ts)         # Configuração Vite
+├── [tailwind.config.ts](tailwind.config.ts) # Configuração Tailwind
+└── [README.md](README.md)
 ```
 
 ## ✨ Funcionalidades
 
-### 🎨 Frontend (Landing Page)
+### 🎮 Frontend (Landing Page)
 - ✅ Design premium inspirado em Apple
 - ✅ Animações suaves (scroll reveal, parallax, hover effects)
 - ✅ 100% responsivo (mobile, tablet, desktop)
@@ -166,7 +171,7 @@ psql -h host -U user -d database -f database.sql
 ### 4. Stripe Webhook
 
 1. Acesse [Stripe Dashboard](https://dashboard.stripe.com/webhooks)
-2. Add endpoint: `https://api.seudominio.com/webhook/stripe`
+2. Adicione endpoint: `https://api.seudominio.com/webhook/stripe`
 3. Eventos: `checkout.session.completed`, `checkout.session.expired`, `charge.refunded`
 4. Copie o signing secret para `STRIPE_WEBHOOK_SECRET`
 
@@ -182,6 +187,7 @@ Configure um bucket privado com:
 ### POST /checkout/session
 Cria sessão de pagamento
 
+**Body:**
 ```json
 {
   "email": "cliente@email.com",
@@ -189,7 +195,7 @@ Cria sessão de pagamento
 }
 ```
 
-Response:
+**Response:**
 ```json
 {
   "sessionId": "cs_test_...",
@@ -206,6 +212,7 @@ Entrega arquivo após validação
 ### POST /newsletter/subscribe
 Adiciona e-mail à newsletter
 
+**Body:**
 ```json
 {
   "email": "cliente@email.com",
@@ -216,7 +223,7 @@ Adiciona e-mail à newsletter
 ### GET /health
 Health check
 
-## 🔐 Segurança
+## 🔒 Segurança
 
 ### Frontend
 - Content Security Policy (CSP)
@@ -235,13 +242,14 @@ Health check
 - Validação Zod
 - Logs de auditoria
 
-## 📊 Monitoramento
+## 📈 Monitoramento
 
 ### Logs
 - `backend/logs/error.log` - Erros críticos
 - `backend/logs/combined.log` - Todas as requisições
 
 ### Health Check
+
 ```bash
 curl https://api.seudominio.com/health
 ```
@@ -254,7 +262,9 @@ curl https://api.seudominio.com/health
 ## 🎨 Customização
 
 ### Cores
-Edite `tailwind.config.ts`:
+
+Edite [`tailwind.config.ts`](tailwind.config.ts):
+
 ```typescript
 colors: {
   primary: "#F5C542",
@@ -263,27 +273,33 @@ colors: {
 ```
 
 ### Textos
-Edite `src/App.tsx` - todos os textos estão inline nos componentes.
+
+Edite [`src/App.tsx`](src/App.tsx) - todos os textos estão inline nos componentes.
 
 ### Preços
+
 Edite `backend/.env`:
 - `STRIPE_PRICE_ID`: price_...
 
 ## 🐛 Debug
 
 ### Frontend
+
 ```bash
 npm run dev
 # Acesse http://localhost:5173
 ```
 
 ### Backend
+
 ```bash
+cd backend
 npm run dev
 # Acesse http://localhost:3000/health
 ```
 
 ### Logs
+
 ```bash
 # Backend
 tail -f backend/logs/combined.log
@@ -292,11 +308,11 @@ tail -f backend/logs/combined.log
 # Dashboard → Developers → Webhooks → Events
 ```
 
-## 📝 Licença
+## 📄 Licença
 
 MIT
 
-## 🤝 Suporte
+## 💬 Suporte
 
 contato@dozeroaomilhao.com
 
