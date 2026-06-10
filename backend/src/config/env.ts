@@ -11,23 +11,8 @@ const envSchema = z.object({
   // Cookie secret (CSRF + sessão)
   COOKIE_SECRET: z.string().min(32),
 
-  // Stripe
-  STRIPE_SECRET_KEY: z.string().startsWith("sk_"),
-  STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
-  STRIPE_PRICE_ID: z.string().startsWith("price_"),
-
   // Database (PostgreSQL)
   DATABASE_URL: z.string().startsWith("postgresql://"),
-
-  // Email
-  EMAIL_PROVIDER: z.enum(["sendgrid", "nodemailer"]).default("sendgrid"),
-  SENDGRID_API_KEY: z.string().startsWith("SG.").optional(),
-  SMTP_HOST: z.string().optional(),
-  SMTP_PORT: z.coerce.number().default(587),
-  SMTP_USER: z.string().optional(),
-  SMTP_PASS: z.string().optional(),
-  EMAIL_FROM: z.string().email(),
-  EMAIL_FROM_NAME: z.string().default("Do Zero ao Milhão"),
 
   // Download seguro
   DOWNLOAD_SECRET: z.string().min(32),
