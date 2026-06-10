@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const PIX_CODE = "00020126580014br.gov.bcb.pix0136b1734aa3-6240-4d95-9194-33387d596f4a5204000053039865406129.905802BR5924Rhian Augusto Reis Lopes6009Sao Paulo62240520daqr3180513534182201630407DD";
+const PIX_CODE = "00020126580014br.gov.bcb.pix0136b1734aa3-6240-4d95-9194-33387d596f4a5204000053039865406129.905802BR5924Rhian Augusto Reis Lopes6009Sao Paulo62240520daqr3180513534991866630477BB";
 
 async function generateQR() {
   const publicDir = path.join(__dirname, "..", "public");
