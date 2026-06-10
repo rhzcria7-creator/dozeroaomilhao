@@ -152,14 +152,7 @@ export default function CheckoutPage() {
                   Garantia {PRODUCT.guaranteeDays} dias
                 </span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-white/10 bg-black/40 col-span-2">
-                <svg className="w-3.5 h-3.5 text-gold-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.7 5.7 21l2.3-7.3-6-4.3h7.6z" />
-                </svg>
-                <span className="text-[11px] text-white/70 leading-tight">
-                  Pagamento processado pelo <strong className="text-white">Mercado Pago</strong>
-                </span>
-              </div>
+{/* INFO MERCADO PAGO REMOVIDA */}
             </div>
           </aside>
 
@@ -234,21 +227,7 @@ export default function CheckoutPage() {
               </button>
             </div>
 
-            {/* RECEIVER INFO */}
-            <div className="mt-7 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-              <div>
-                <div className="text-white/40 uppercase tracking-widest text-[10px]">Nome</div>
-                <div className="mt-1 text-white/90 font-medium">{PIX.receiverName}</div>
-              </div>
-              <div>
-                <div className="text-white/40 uppercase tracking-widest text-[10px]">CPF</div>
-                <div className="mt-1 text-white/90 font-medium font-mono">{PIX.cpfMasked}</div>
-              </div>
-              <div>
-                <div className="text-white/40 uppercase tracking-widest text-[10px]">Instituição</div>
-                <div className="mt-1 text-white/90 font-medium">{PIX.institution}</div>
-              </div>
-            </div>
+{/* RECEIVER INFO REMOVIDO PARA PRIVACIDADE */}
           </section>
         </div>
 
@@ -288,7 +267,7 @@ export default function CheckoutPage() {
             <p className="text-xs text-mist max-w-md leading-relaxed">
               Já efetuou o pagamento? O acesso ao PDF é liberado em até{" "}
               <span className="text-white">2 minutos</span> após a confirmação
-              do Mercado Pago.
+              do pagamento.
             </p>
             <a
               href="/sucesso?session_id=demo"
