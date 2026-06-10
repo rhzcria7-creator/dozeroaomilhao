@@ -14,6 +14,7 @@ import { downloadRouter } from "./routes/download.js";
 import { purchaseRouter } from "./routes/purchase.js";
 import { newsletterRouter } from "./routes/newsletter.js";
 import { healthRouter } from "./routes/health.js";
+import { adminRouter } from "./routes/admin.js";
 import { errorHandler } from "./middleware/error-handler.js";
 
 // Logger
@@ -187,6 +188,7 @@ app.use("/webhook", webhookRouter);
 app.use("/api/purchase", purchaseRouter);
 app.use("/api/download", downloadRouter);
 app.use("/newsletter", newsletterRouter);
+app.use("/admin", adminRouter);
 
 // 404 handler
 app.use((_req, res) => {
