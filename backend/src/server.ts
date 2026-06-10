@@ -56,9 +56,9 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      imgSrc: ["'self'", "data:", "blob:"],
+      imgSrc: ["'self'", "data:", "blob:", "https:"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
       connectSrc: ["'self'"],
       frameSrc: ["'none'"],
@@ -72,6 +72,15 @@ app.use(helmet({
   crossOriginOpenerPolicy: true,
   crossOriginResourcePolicy: { policy: "same-origin" },
   referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  hsts: {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true,
+  },
+  noSniff: true,
+  permittedCrossDomainPolicies: { permittedPolicies: "none" },
+  hidePoweredBy: true,
+  xssFilter: true,
 }));
 
 // 3. CORS - apenas domínio do frontend
@@ -189,6 +198,25 @@ app.use("/api/purchase", purchaseRouter);
 app.use("/api/download", downloadRouter);
 app.use("/newsletter", newsletterRouter);
 app.use("/admin", adminRouter);
+
+// ============================================================
+// SECURITY HEADERS (extra)
+// ============================================================
+app.use((req, res, next) => {
+  // Remove headers que revelam informação do servidor
+  res.removeHeader("X-Powered-By");
+  res.removeHeader("Server");
+  res.removeHeader("X-AspNet-Version");
+  res.removeHeader("X-AspNetMvc-Version");
+  
+  // Adiciona headers extras
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  
+  next();
+});
 
 // 404 handler
 app.use((_req, res) => {

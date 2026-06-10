@@ -16,6 +16,11 @@ const downloadRateLimit = new Map<string, { count: number; resetAt: number }>();
 const DOWNLOAD_RATE_LIMIT = 5;
 const DOWNLOAD_RATE_WINDOW = 60 * 60 * 1000; // 1 hora
 
+// IP blocking (bloqueia após 3 tentativas falhas)
+const blockedIPs = new Map<string, { until: number; attempts: number }>();
+const BLOCK_DURATION = 60 * 60 * 1000; // 1 hora
+const MAX_FAILED_ATTEMPTS = 3;
+
 function checkDownloadRateLimit(ip: string): boolean {
   const now = Date.now();
   const record = downloadRateLimit.get(ip);
@@ -31,6 +36,43 @@ function checkDownloadRateLimit(ip: string): boolean {
 
   record.count++;
   return true;
+}
+
+function checkIPBlocked(ip: string): boolean {
+  const record = blockedIPs.get(ip);
+  if (!record) return false;
+  
+  if (Date.now() > record.until) {
+    blockedIPs.delete(ip);
+    return false;
+  }
+  return true;
+}
+
+function blockIP(ip: string): void {
+  blockedIPs.set(ip, {
+    until: Date.now() + BLOCK_DURATION,
+    attempts: (blockedIPs.get(ip)?.attempts || 0) + 1,
+  });
+  logger.warn("IP blocked for download abuse", { ip });
+}
+
+function normalizeAndValidatePath(filePath: string, allowedDir: string): string | null {
+  // Normaliza o caminho (remove .., resolve links, etc)
+  const normalized = path.normalize(filePath);
+  
+  // Obtém o diretório pai do arquivo permitido
+  const allowedDirPath = path.resolve(allowedDir);
+  
+  // Resolve o caminho do arquivo
+  const resolvedPath = path.resolve(allowedDir, normalized);
+  
+  // Verifica se o caminho resolved está dentro do diretório permitido
+  if (!resolvedPath.startsWith(allowedDirPath + path.sep)) {
+    return null;
+  }
+  
+  return resolvedPath;
 }
 
 /**
@@ -57,10 +99,17 @@ downloadRouter.get(
     const userAgent = req.headers["user-agent"] || "unknown";
 
     try {
+      // Verificar IP bloqueado
+      if (checkIPBlocked(ip)) {
+        logger.warn("Download attempt from blocked IP", { ip });
+        return res.status(403).json({ error: "IP temporariamente bloqueado" });
+      }
+
       // Validação de entrada
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.warn("Download attempt with invalid token format", { ip, tokenLength: token.length });
+        blockIP(ip); // Bloquear após formato inválido (possível ataque)
         return res.status(400).json({ error: "Token inválido" });
       }
 
@@ -102,6 +151,11 @@ downloadRouter.get(
         // Log de auditoria
         await logAuditEvent("download.invalid_token", null, ip, userAgent, false, "Token inválido ou expirado");
         
+        // Bloquear IP após múltiplas tentativas falhas
+        if (checkDownloadRateLimit(ip)) {
+          blockIP(ip);
+        }
+        
         return res.status(403).json({ error: "Token inválido ou expirado" });
       }
 
@@ -114,6 +168,7 @@ downloadRouter.get(
 
       if (!purchase) {
         logger.warn("Download attempt for non-existent purchase", { ip, purchaseId: payload.purchaseId });
+        blockIP(ip);
         return res.status(404).json({ error: "Compra não encontrada" });
       }
 
@@ -140,13 +195,27 @@ downloadRouter.get(
         
         await logAuditEvent("download.email_mismatch", purchase.id, ip, userAgent, false, "Email hash não corresponde");
         
+        blockIP(ip);
         return res.status(403).json({ error: "Token não pertence a esta compra" });
       }
 
-      // Verificar se há arquivo para download
-      const ebookPath = process.env.DOWNLOAD_FILE_PATH;
-      if (!ebookPath || !fs.existsSync(ebookPath)) {
-        logger.error("Ebook file not found", { ebookPath, purchaseId: purchase.id });
+      // Verificar se há arquivo para download com validação de path
+      const ebookPathEnv = process.env.DOWNLOAD_FILE_PATH;
+      if (!ebookPathEnv) {
+        logger.error("DOWNLOAD_FILE_PATH not configured", { purchaseId: purchase.id });
+        return res.status(500).json({ error: "Arquivo não disponível" });
+      }
+
+      // Validar path contra path traversal
+      const ebookDir = path.dirname(ebookPathEnv);
+      const safePath = normalizeAndValidatePath(path.basename(ebookPathEnv), ebookDir);
+      
+      if (!safePath || !fs.existsSync(safePath)) {
+        logger.error("Ebook file not found or path traversal detected", { 
+          originalPath: ebookPathEnv, 
+          safePath,
+          purchaseId: purchase.id 
+        });
         return res.status(500).json({ error: "Arquivo não disponível" });
       }
 
@@ -157,7 +226,7 @@ downloadRouter.get(
       await logAuditEvent("download.success", purchase.id, ip, userAgent, true);
 
       // Obter informações do arquivo
-      const stats = fs.statSync(ebookPath);
+      const stats = fs.statSync(safePath);
       const fileSize = stats.size;
       const fileName = "ebook-do-zero-ao-milhao.pdf";
 
@@ -169,6 +238,8 @@ downloadRouter.get(
       res.setHeader("Pragma", "no-cache");
       res.setHeader("X-Content-Type-Options", "nosniff");
       res.setHeader("X-Download-Token", "validated");
+      res.removeHeader("X-Powered-By");
+      res.removeHeader("Server");
 
       logger.info("Download started", { 
         purchaseId: purchase.id, 
@@ -178,7 +249,7 @@ downloadRouter.get(
       });
 
       // Streaming do arquivo
-      const fileStream = fs.createReadStream(ebookPath);
+      const fileStream = fs.createReadStream(safePath);
       let bytesTransferred = 0;
 
       fileStream.on("data", (chunk) => {
