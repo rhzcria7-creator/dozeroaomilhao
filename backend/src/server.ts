@@ -11,6 +11,7 @@ import { config } from "./config/env.js";
 import { checkoutRouter } from "./routes/checkout.js";
 import { webhookRouter } from "./routes/webhook.js";
 import { downloadRouter } from "./routes/download.js";
+import { purchaseRouter } from "./routes/purchase.js";
 import { newsletterRouter } from "./routes/newsletter.js";
 import { healthRouter } from "./routes/health.js";
 import { errorHandler } from "./middleware/error-handler.js";
@@ -184,7 +185,8 @@ app.use((req, _res, next) => {
 app.use("/health", healthRouter);
 app.use("/checkout", checkoutLimiter, checkoutRouter);
 app.use("/webhook", webhookRouter);
-app.use("/download", downloadRouter);
+app.use("/api/purchase", purchaseRouter);
+app.use("/api/download", downloadRouter);
 app.use("/newsletter", newsletterRouter);
 
 // 404 handler

@@ -32,6 +32,10 @@ const envSchema = z.object({
   // Download seguro
   DOWNLOAD_SECRET: z.string().min(32),
   DOWNLOAD_URL: z.string().url(),
+  DOWNLOAD_FILE_PATH: z.string().optional(),
+
+  // Token HMAC (opcional, usa DOWNLOAD_SECRET se não definido)
+  TOKEN_SECRET: z.string().min(32).optional(),
 
   // Newsletter
   MAILCHIMP_API_KEY: z.string().optional(),

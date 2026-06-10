@@ -13,18 +13,21 @@ CREATE TABLE IF NOT EXISTS purchases (
   currency TEXT DEFAULT 'brl',
   status TEXT DEFAULT 'pending' NOT NULL,
   paid_at TIMESTAMP,
+  refunded_at TIMESTAMP,
+  status_reason TEXT,
   metadata JSONB,
   created_at TIMESTAMP DEFAULT NOW() NOT NULL,
   
   CONSTRAINT valid_email CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
-  CONSTRAINT valid_amount CHECK (amount >= 0)
+  CONSTRAINT valid_amount CHECK (amount >= 0),
+  CONSTRAINT valid_status CHECK (status IN ('pending', 'completed', 'refunded', 'cancelled'))
 );
 
 -- Índice para busca rápida
-CREATE INDEX idx_purchases_email ON purchases(email);
-CREATE INDEX idx_purchases_stripe_session ON purchases(stripe_session_id);
-CREATE INDEX idx_purchases_status ON purchases(status);
-CREATE INDEX idx_purchases_created_at ON purchases(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_purchases_email ON purchases(email);
+CREATE INDEX IF NOT EXISTS idx_purchases_stripe_session ON purchases(stripe_session_id);
+CREATE INDEX IF NOT EXISTS idx_purchases_status ON purchases(status);
+CREATE INDEX IF NOT EXISTS idx_purchases_created_at ON purchases(created_at DESC);
 
 -- Tabela de tokens de download
 CREATE TABLE IF NOT EXISTS downloads (
@@ -40,9 +43,21 @@ CREATE TABLE IF NOT EXISTS downloads (
 );
 
 -- Índice para validação rápida de tokens
-CREATE INDEX idx_downloads_token ON downloads(token);
-CREATE INDEX idx_downloads_purchase_id ON downloads(purchase_id);
-CREATE INDEX idx_downloads_expires_at ON downloads(expires_at);
+CREATE INDEX IF NOT EXISTS idx_downloads_token ON downloads(token);
+CREATE INDEX IF NOT EXISTS idx_downloads_purchase_id ON downloads(purchase_id);
+CREATE INDEX IF NOT EXISTS idx_downloads_expires_at ON downloads(expires_at);
+
+-- Tabela de tokens revogados (para segurança adicional)
+CREATE TABLE IF NOT EXISTS revoked_tokens (
+  id SERIAL PRIMARY KEY,
+  token_hash TEXT UNIQUE NOT NULL,
+  revoked_at TIMESTAMP DEFAULT NOW() NOT NULL,
+  reason TEXT,
+  
+  CONSTRAINT valid_token_hash CHECK (length(token_hash) >= 64)
+);
+
+CREATE INDEX IF NOT EXISTS idx_revoked_tokens_hash ON revoked_tokens(token_hash);
 
 -- Tabela de newsletter/leads
 CREATE TABLE IF NOT EXISTS subscribers (
@@ -58,9 +73,9 @@ CREATE TABLE IF NOT EXISTS subscribers (
 );
 
 -- Índice para segmentação
-CREATE INDEX idx_subscribers_email ON subscribers(email);
-CREATE INDEX idx_subscribers_source ON subscribers(source);
-CREATE INDEX idx_subscribers_subscribed_at ON subscribers(subscribed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers(email);
+CREATE INDEX IF NOT EXISTS idx_subscribers_source ON subscribers(source);
+CREATE INDEX IF NOT EXISTS idx_subscribers_subscribed_at ON subscribers(subscribed_at DESC);
 
 -- Tabela de logs de atividade (auditoria)
 CREATE TABLE IF NOT EXISTS activity_logs (
@@ -75,8 +90,9 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 );
 
 -- Índice para análise
-CREATE INDEX idx_activity_logs_action ON activity_logs(action);
-CREATE INDEX idx_activity_logs_created_at ON activity_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_action ON activity_logs(action);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_created_at ON activity_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_logs_entity ON activity_logs(entity_type, entity_id);
 
 -- Função para atualizar timestamp automaticamente
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -87,14 +103,13 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- Trigger (opcional, para auditoria)
--- CREATE TRIGGER update_purchases_updated_at
---   BEFORE UPDATE ON purchases
---   FOR EACH ROW
---   EXECUTE FUNCTION update_updated_at_column();
-
 -- Comentários
 COMMENT ON TABLE purchases IS 'Registra todas as compras realizadas';
 COMMENT ON TABLE downloads IS 'Tokens seguros para download de arquivos';
+COMMENT ON TABLE revoked_tokens IS 'Tokens que foram revogados por segurança';
 COMMENT ON TABLE subscribers IS 'Assinantes da newsletter';
 COMMENT ON TABLE activity_logs IS 'Logs de auditoria de todas as ações';
+
+-- Permissões (ajuste conforme seu usuário)
+-- GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO your_app_user;
+-- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO your_app_user;

@@ -117,7 +117,35 @@ webhookRouter.post(
 
     if (event.type === "charge.refunded") {
       const charge = event.data.object as Stripe.Charge;
-      logger.warn("Charge refunded", { chargeId: charge.id });
+      
+      // Buscar compra pelo payment intent
+      try {
+        const [purchase] = await db
+          .select()
+          .from(purchases)
+          .where(eq(purchases.stripePaymentIntentId, charge.payment_intent as string))
+          .limit(1);
+
+        if (purchase) {
+          // Atualizar status para reembolsado
+          await db
+            .update(purchases)
+            .set({ 
+              status: "refunded",
+              refundedAt: new Date(),
+              statusReason: "Stripe charge.refunded"
+            })
+            .where(eq(purchases.id, purchase.id));
+
+          logger.warn("Purchase marked as refunded", { 
+            purchaseId: purchase.id, 
+            chargeId: charge.id,
+            email: purchase.email 
+          });
+        }
+      } catch (error) {
+        logger.error("Failed to process refund", { error, chargeId: charge.id });
+      }
     }
 
     res.json({ received: true });
