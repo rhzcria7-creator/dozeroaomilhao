@@ -235,6 +235,44 @@ if (!purchase) {
 | CSRF | ✅ Passou |
 | Clickjacking | ✅ Passou |
 | Session Hijacking | ✅ Passou |
+| SSRF | ✅ Passou |
+| Open Redirect | ✅ Passou |
+| IDOR | ✅ Passou |
+| Abuso de APIs | ✅ Passou |
+
+---
+
+## Melhorias Recentes (v1.1)
+
+### Error Handler Aprimorado
+- Classe `AppError` com códigos de status
+- Helpers de erro pré-definidos
+- Request ID para rastreamento
+- Logs detalhados com contexto
+
+### Health Check Aprimorado
+- `/health` - Status completo com métricas
+- `/health/ready` - Liveness probe
+- `/health/live` - Readiness probe
+- Verificação de banco de dados
+- Métricas de memória e requests
+
+### Database Schema Aprimorado
+- `updated_at` com auto-update trigger
+- Índices parciais para registros ativos
+- `token_hash` para armazenamento seguro
+- Tabela `admin_sessions` para sessões persistentes
+- Tabela `ip_blocks` para IPs bloqueados
+- Tabela `daily_metrics` para dashboards
+- Função `cleanup_old_logs()` para limpeza automática
+- Mais constraints e validações
+
+### Novas Proteções de Segurança
+- Anti-Abuse System (bloqueia após 20 tentativas/minuto)
+- SSRF Protection (bloqueia localhost, cloud metadata, private IPs)
+- Open Redirect Protection (valida returnTo parameter)
+- IP Blocking automático no admin
+- Detecção de padrões suspeitos
 
 ---
 
