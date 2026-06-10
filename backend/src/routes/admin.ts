@@ -5,6 +5,7 @@ import { config } from "../config/env.js";
 import { logger } from "../server.js";
 import { db, purchases, downloads, subscribers, activityLogs, eq, desc, and, gte } from "../services/database.js";
 import { authenticateAdmin, createSession, validateSession, invalidateSession } from "../services/auth.js";
+import { checkAbuse, recordAbuseAttempt } from "../middleware/abuse-detection.js";
 
 export const adminRouter = Router();
 
@@ -12,6 +13,10 @@ export const adminRouter = Router();
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 const LOGIN_RATE_LIMIT = 3;
 const LOGIN_RATE_WINDOW = 60 * 60 * 1000;
+
+// IP blocking para admin
+const adminBlockedIPs = new Map<string, { until: number }>();
+const ADMIN_BLOCK_DURATION = 60 * 60 * 1000; // 1 hora
 
 function checkLoginRateLimit(ip: string): boolean {
   const now = Date.now();
@@ -30,8 +35,39 @@ function checkLoginRateLimit(ip: string): boolean {
   return true;
 }
 
+function checkAdminBlocked(ip: string): boolean {
+  const record = adminBlockedIPs.get(ip);
+  if (!record) return false;
+  
+  if (Date.now() > record.until) {
+    adminBlockedIPs.delete(ip);
+    return false;
+  }
+  return true;
+}
+
+function blockAdminIP(ip: string): void {
+  adminBlockedIPs.set(ip, { until: Date.now() + ADMIN_BLOCK_DURATION });
+  logger.warn("Admin IP blocked", { ip });
+}
+
 // Auth middleware
 function adminAuth(req: Request, res: Response, next: NextFunction) {
+  const ip = req.ip || "unknown";
+  
+  // Verificar IP bloqueado
+  if (checkAdminBlocked(ip)) {
+    logger.warn("Admin access blocked", { ip });
+    return res.status(403).json({ error: "Acesso temporariamente bloqueado" });
+  }
+  
+  // Verificar abuso
+  const abuseResult = checkAbuse(ip);
+  if (abuseResult.isBlocked) {
+    blockAdminIP(ip);
+    return res.status(403).json({ error: "Acesso temporariamente bloqueado" });
+  }
+
   const sessionId = req.headers["x-session-id"] as string || 
                     req.cookies?.session_id;
 
@@ -41,6 +77,7 @@ function adminAuth(req: Request, res: Response, next: NextFunction) {
 
   const session = validateSession(sessionId);
   if (!session) {
+    recordAbuseAttempt(ip, "Invalid admin session");
     return res.status(401).json({ error: "Sessão inválida ou expirada" });
   }
 

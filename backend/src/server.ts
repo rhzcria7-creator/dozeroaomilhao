@@ -40,6 +40,34 @@ if (config.NODE_ENV !== "production") {
 const app = express();
 
 // ============================================================
+// OPEN REDIRECT PROTECTION
+// ============================================================
+const ALLOWED_REDIRECT_PATTERNS = [
+  /^https:\/\/dozeroaomilhao\.com/,
+  /^https:\/\/www\.dozeroaomilhao\.com/,
+  /^https:\/\/api\.dozeroaomilhao\.com/,
+];
+
+app.use((req, res, next) => {
+  // Validar query parameter 'returnTo' para evitar open redirect
+  const returnTo = req.query.returnTo as string;
+  if (returnTo) {
+    let isAllowed = false;
+    for (const pattern of ALLOWED_REDIRECT_PATTERNS) {
+      if (pattern.test(returnTo)) {
+        isAllowed = true;
+        break;
+      }
+    }
+    if (!isAllowed && !returnTo.startsWith("/")) {
+      logger.warn("Blocked open redirect attempt", { returnTo, ip: req.ip });
+      req.query.returnTo = undefined;
+    }
+  }
+  next();
+});
+
+// ============================================================
 // SECURITY MIDDLEWARE
 // ============================================================
 

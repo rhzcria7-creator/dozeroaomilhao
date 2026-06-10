@@ -289,7 +289,7 @@ export default function SuccessPage() {
               <p className="text-xs text-white/50">
                 Não recebeu o e-mail? Verifique sua caixa de spam ou{" "}
                 <a
-                  href="mailto:contato@dozeroaomilhao.com"
+                  href="mailto:rhz.cria.7@gmail.com"
                   className="text-gold-400 hover:underline"
                 >
                   entre em contato
@@ -370,7 +370,7 @@ export default function SuccessPage() {
             <p className="mt-8 text-xs text-white/40">
               Precisa de ajuda?{" "}
               <a
-                href="mailto:contato@dozeroaomilhao.com"
+                href="mailto:rhz.cria.7@gmail.com"
                 className="text-gold-400 hover:underline"
               >
                 Entre em contato
