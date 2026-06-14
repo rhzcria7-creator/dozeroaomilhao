@@ -26,6 +26,8 @@ export const purchases = pgTable("purchases", {
   currency: text("currency").default("brl"),
   status: text("status").default("pending").notNull(),
   paidAt: timestamp("paid_at"),
+  refundedAt: timestamp("refunded_at"),
+  statusReason: text("status_reason"),
   metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
@@ -48,6 +50,17 @@ export const subscribers = pgTable("subscribers", {
   tags: jsonb("tags").default("[]"),
   subscribedAt: timestamp("subscribed_at").defaultNow().notNull(),
   unsubscribedAt: timestamp("unsubscribed_at"),
+});
+
+export const activityLogs = pgTable("activity_logs", {
+  id: serial("id").primaryKey(),
+  action: text("action").notNull(),
+  entityType: text("entity_type").notNull(),
+  entityId: serial("entity_id"),
+  metadata: jsonb("metadata"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export { eq };

@@ -11,8 +11,10 @@ import { config } from "./config/env.js";
 import { checkoutRouter } from "./routes/checkout.js";
 import { webhookRouter } from "./routes/webhook.js";
 import { downloadRouter } from "./routes/download.js";
+import { purchaseRouter } from "./routes/purchase.js";
 import { newsletterRouter } from "./routes/newsletter.js";
 import { healthRouter } from "./routes/health.js";
+import { adminRouter } from "./routes/admin.js";
 import { errorHandler } from "./middleware/error-handler.js";
 
 // Logger
@@ -58,11 +60,11 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       imgSrc: ["'self'", "data:", "blob:"],
       fontSrc: ["'self'", "https://fonts.gstatic.com", "data:"],
-      connectSrc: ["'self'", "https://api.stripe.com"],
-      frameSrc: ["https://js.stripe.com", "https://hooks.stripe.com"],
+      connectSrc: ["'self'"],
+      frameSrc: ["'none'"],
       frameAncestors: ["'none'"],
       baseUri: ["'self'"],
-      formAction: ["'self'", "https://checkout.stripe.com"],
+      formAction: ["'self'"],
       upgradeInsecureRequests: [],
     },
   },
@@ -77,7 +79,7 @@ app.use(cors({
   origin: config.ALLOWED_ORIGINS.split(","),
   credentials: true,
   methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token", "Stripe-Signature"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
   maxAge: 86400,
 }));
 
@@ -143,13 +145,12 @@ const checkoutLimiter = rateLimit({
   message: { error: "Muitas tentativas de checkout. Aguarde 1 hora." },
 });
 
-// Rate limit para webhook (Stripe)
+// Rate limit para webhook
 const webhookLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
   max: 30,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req) => req.path === "/webhook/stripe",
 });
 app.use(webhookLimiter);
 
@@ -184,8 +185,10 @@ app.use((req, _res, next) => {
 app.use("/health", healthRouter);
 app.use("/checkout", checkoutLimiter, checkoutRouter);
 app.use("/webhook", webhookRouter);
-app.use("/download", downloadRouter);
+app.use("/api/purchase", purchaseRouter);
+app.use("/api/download", downloadRouter);
 app.use("/newsletter", newsletterRouter);
+app.use("/admin", adminRouter);
 
 // 404 handler
 app.use((_req, res) => {
@@ -206,8 +209,6 @@ if (config.NODE_ENV !== "test") {
   app.listen(PORT, () => {
     logger.info(`🚀 Server running on port ${PORT} (${config.NODE_ENV})`);
     logger.info(`🔒 Security: Helmet, CORS, Rate Limit, XSS Sanitize enabled`);
-    logger.info(`💳 Stripe webhook: /webhook/stripe`);
-    logger.info(`📧 Email: configured via ${config.EMAIL_PROVIDER}`);
   });
 }
 
