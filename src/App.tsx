@@ -319,12 +319,11 @@ function Nav() {
           {links.map((l, i) => (
             <a key={i} href={l.href} className="menu-link hover:text-white transition">{l.label}</a>
           ))}
-        </div>
-        <ClickSpark>
-          <a href={CHECKOUT_URL} className="btn-primary !py-2 !px-5 !text-sm">
-            Quero o Ebook
-          </a>
-        </ClickSpark>
+        </div><ClickSpark>
+              <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="btn-primary !py-2 !px-5 !text-sm">
+                Quero o Ebook
+              </a>
+            </ClickSpark>
       </nav>
     </header>
   );
@@ -364,7 +363,7 @@ function Hero() {
           </p>
           <div className="hero-anim-4 mt-10 flex flex-col sm:flex-row gap-4">
             <ClickSpark>
-              <a href={CHECKOUT_URL} className="btn-primary glow-pulse inline-flex">
+              <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="btn-primary glow-pulse inline-flex">
                 Quero o Guia Definitivo
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </a>
@@ -705,7 +704,7 @@ function Chapters() {
                 </div>
               </div>
               <ClickSpark>
-                <a href={CHECKOUT_URL} className="btn-primary !px-5 !py-2.5 !text-sm">Comprar</a>
+                <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="btn-primary !px-5 !py-2.5 !text-sm">Comprar</a>
               </ClickSpark>
             </div>
           </Spotlight>
@@ -864,11 +863,11 @@ function Faq() {
   const items = [
     { q: "O que exatamente eu recebo na compra?", a: `Você recebe o ebook completo "${PRODUCT.name} — ${PRODUCT.subtitle}", em PDF, com 40 páginas de conteúdo estratégico distribuído em 7 capítulos sequenciais. O acesso é imediato após a confirmação do Pix.` },
     { q: "Por que apenas 40 páginas? Esse é o ebook inteiro?", a: "Sim. 40 páginas de puro conteúdo, sem enrolação. Cortamos preenchimento, repetição e teoria solta — só o que move o ponteiro. É um manual completo, não um resumo." },
-    { q: "Como funciona o pagamento via Pix?", a: `Ao clicar em comprar, você é levado ao checkout seguro. Lá, escaneia o QR Code ou copia o código Pix e paga pelo app do seu banco. O pagamento de R$ ${PRODUCT.price.current} é processado pelo Mercado Pago e seu acesso é liberado em poucos minutos.` },
+    { q: "Como funciona o pagamento via Pix?", a: `Ao clicar em comprar, você é redirecionado para o checkout seguro da InfinitePay. Lá, escaneia o QR Code ou copia o código Pix e paga pelo app do seu banco. O pagamento de R$ ${PRODUCT.price.current} é processado de forma segura e seu acesso é liberado em poucos minutos.` },
     { q: "Posso parcelar?", a: `A oferta promocional de R$ ${PRODUCT.price.current} é exclusiva para Pix à vista. No cartão, ${PRODUCT.price.installments.toLowerCase()}.` },
     { q: "Existe garantia?", a: `Sim. Você tem ${PRODUCT.guaranteeDays} dias de garantia incondicional. Se o conteúdo não fizer sentido para você, devolvemos 100% do valor investido, sem perguntas.` },
     { q: "Preciso de conhecimento prévio em finanças?", a: "Não. O ebook foi escrito para ser acessível mesmo a quem nunca estudou finanças, sem abrir mão da profundidade. Cada conceito é explicado do zero." },
-    { q: "Como recebo o material após o pagamento?", a: "Assim que o Pix é confirmado pelo Mercado Pago, você recebe o link de download por e-mail e também tem acesso imediato pela página de confirmação. O link fica válido por 30 dias." },
+    { q: "Como recebo o material após o pagamento?", a: "Assim que o pagamento é confirmado, você recebe o link de download por e-mail. O link fica válido por 30 dias." },
   ];
   return (
     <section id="faq" className="relative py-28 lg:py-40 bg-black">
@@ -957,7 +956,7 @@ function Offer() {
               ))}
             </div>
             <ClickSpark>
-              <a href={CHECKOUT_URL} className="btn-primary mt-8 w-full !py-4 text-lg inline-flex justify-center">
+              <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8 w-full !py-4 text-lg inline-flex justify-center">
                 Quero o Guia Definitivo
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
               </a>
@@ -968,7 +967,7 @@ function Offer() {
         <div className="reveal reveal-delay-2 mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-mist">
           <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Compra 100% segura</span>
           <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Garantia de 7 dias</span>
-          <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.7 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg>Pagamento processado pelo Mercado Pago</span>
+          <span className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-gold-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6 4.3 2.3 7.3L12 16.7 5.7 21l2.3-7.3-6-4.3h7.6z"/></svg>Pagamento 100% seguro via InfinitePay</span>
         </div>
 
         <p className="reveal reveal-delay-2 mt-10 text-center text-xs text-mist max-w-2xl mx-auto leading-relaxed">
@@ -997,7 +996,7 @@ function FinalCta() {
           O melhor momento para plantar uma árvore foi há vinte anos. O segundo melhor é agora.
         </p>
         <ClickSpark>
-          <a href={CHECKOUT_URL} className="btn-primary glow-pulse mt-12 !px-12 !py-5 text-lg inline-flex">
+          <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" className="btn-primary glow-pulse mt-12 !px-12 !py-5 text-lg inline-flex">
             Começar Minha Jornada Agora
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
@@ -1036,22 +1035,8 @@ function Footer() {
 // ============================================================
 // APP
 // ============================================================
-import SuccessPage from "./pages/SuccessPage";
-import CheckoutPage from "./pages/CheckoutPage";
-
 export default function App() {
   useScrollReveal();
-
-  const path =
-    (window as any).__FORCED_PATH__ || window.location.pathname;
-
-  // Roteamento simples
-  if (path === "/checkout") {
-    return <CheckoutPage />;
-  }
-  if (path === "/sucesso" || window.location.search.includes("session_id")) {
-    return <SuccessPage />;
-  }
 
   return (
     <div className="min-h-screen bg-black text-white antialiased">

@@ -23,19 +23,6 @@ export const PRODUCT = {
 } as const;
 
 // ============================================================
-// PIX — Dados de pagamento (Mercado Pago)
-// ============================================================
-export const PIX = {
-  receiverName: "Rhian Augusto Reis Lopes",
-  cpfMasked: "***.873.036-**",
-  institution: "Mercado Pago",
-  qrCodeImage: "/qr-code-pix-clean.png",
-  // Código copia-e-cola PIX (BR Code EMV)
-  copyPaste:
-    "00020126580014br.gov.bcb.pix0136b1734aa3-6240-4d95-9194-33387d596f4a5204000053039865406129.905802BR5924Rhian Augusto Reis Lopes6009Sao Paulo62240520daqr3180513534991866630477BB",
-} as const;
-
-// ============================================================
 // CAPÍTULOS — Os 7 capítulos do ebook único de 40 páginas
 // ============================================================
 export interface Chapter {
@@ -93,6 +80,6 @@ export const CHAPTERS: Chapter[] = [
 ];
 
 // ============================================================
-// CTA — link único para checkout
+// CTA — link externo InfinitePay
 // ============================================================
-export const CHECKOUT_URL = "/checkout";
+export const CHECKOUT_URL = "https://checkout.infinitepay.io/wequo/JG6ccslCLF";
